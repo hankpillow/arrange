@@ -68,6 +68,6 @@ This is a great feature because you can use Arrange to know where you should pla
 	Tweener.addTween(o.target,{x:o.point.x,y:o.point.y})
 } );</code></pre>
 
-After calling <code>simlate</code> the engine will stop changing the position and start "faking".
+After calling <code>simulate</code> the engine will stop changing the position and start "faking".
 You can get this simulation result at <code>list</code> property, and all objects will have a <code>target</code> and <code>point</code> which you can use to figure where to put it.
 You can also stop faking it by calling <code>place(list).simulate(false)</code>
