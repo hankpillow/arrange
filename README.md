@@ -55,6 +55,8 @@ In this example the given list will be arranged placing every item to right side
 In this example the given list will be arranged placing every item at the 50% of the "real" right side.
 If you have 2 objects with 50px (at 0,0 position) and call the method above, the second object will be placed at x=25 and not at x=50 as if you had called *toRight* without any *step*.
 
+But if your object has a timeline in which the object's size changes during this time, you can also pass an optional object with *width* and *height* and the engine will ignore the real size and use the given one.
+
 ## What's new?
 
 * Now we have the wrapper *place* but if you prefer you can just call *new Arrange([sprite1,sprite2,...spriteN]).toRight();*
