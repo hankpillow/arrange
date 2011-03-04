@@ -8,13 +8,11 @@ package
 
 	public class ArrangeTest extends Sprite
 	{
-		private var list : Array = [];
-		private var tests : int
-		private var total : int
+		private var list : Vector.<*>;
 		public function ArrangeTest()
 		{
 			super();
-		
+			list = new Vector.<*>()
 			list.push(addChild(getBox("box")))
 			list.push(addChild(getScrollrectBox()))
 			list.push(addChild(getCircle()))

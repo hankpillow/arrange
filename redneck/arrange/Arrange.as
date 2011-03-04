@@ -72,7 +72,9 @@ package redneck.arrange
 			}
 		}
 		/**
-		* adds a new item
+		* Add a new item into the end of the current list
+		* 
+		* @see chain
 		* 
 		* @param item	* 
 		* 
@@ -543,6 +545,35 @@ package redneck.arrange
 				}
 			}
 			return this
+		}
+		/**
+		* Join the given <code>list</code> with the last item of the current <code>list</code> and return a new Arrange;
+		* 
+		* @see list
+		* @see add
+		* 
+		* @usage
+		* place( [a,b] ).toRight({x:5}).chain([c,d]).toRight()
+		* 
+		* This is the same as:
+		* 
+		* place( [a,b] ).toRight({x:5})
+		* place( [b,c,d] ).toRight()
+		* 
+		* @return Arrange
+		**/
+		public function chain(list:Array):Arrange
+		{
+			if (arrangeList && arrangeList.length>0 && list){
+				//concat the very list with the given list
+				return new Arrange( [arrangeList[arrangeList.length-1].target].concat(list) );
+			}
+			else if (list){
+				//if empty, no worry, just return a new arrange
+				return new Arrange(list);
+			}
+			//even if everything goes wrong you'll get your dreamed arrangeList
+			return new Arrange();
 		}
 	}
 }
