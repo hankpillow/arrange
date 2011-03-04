@@ -55,6 +55,8 @@ In this example the given list will be arranged placing every item to right side
 In this example the given list will be arranged placing every item at the 50% of the "real" right side.
 If you have 2 objects with 50px (at 0,0 position) and call the method above, the second object will be placed at x=25 and not at x=50 as if you had called *toRight* without any *step*.
 
+But if your object has a timeline in which the object's size changes during this time, you can also pass an optional object with *width* and *height* and the engine will ignore the real size and use the given one.
+
 ## What's new?
 
 * Now we have the wrapper *place* but if you prefer you can just call *new Arrange([sprite1,sprite2,...spriteN]).toRight();*
@@ -68,6 +70,6 @@ This is a great feature because you can use Arrange to know where you should pla
 	Tweener.addTween(o.target,{x:o.point.x,y:o.point.y})
 } );</code></pre>
 
-After calling <code>simlate</code> the engine will stop changing the position and start "faking".
+After calling <code>simulate</code> the engine will stop changing the position and start "faking".
 You can get this simulation result at <code>list</code> property, and all objects will have a <code>target</code> and <code>point</code> which you can use to figure where to put it.
 You can also stop faking it by calling <code>place(list).simulate(false)</code>
