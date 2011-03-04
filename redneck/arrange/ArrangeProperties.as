@@ -16,8 +16,7 @@ package redneck.arrange
 		public var width : Number = NaN;
 		public var height : Number = NaN;
 		public var step : Number = 1;
-		public var simulate : Boolean  = false
-		public static const ALLOWED_PROPERTIES : Array = [ "padding_x", "padding_y", "width", "height", "step", "simulate" ];
+		public static const ALLOWED_PROPERTIES : Array = [ "padding_x", "padding_y", "width", "height", "step"];
 
 		public function clone():ArrangeProperties
 		{
@@ -27,7 +26,6 @@ package redneck.arrange
 				prop.padding_x = padding_x;
 				prop.padding_y = padding_y;
 				prop.step = step
-				prop.simulate = simulate
 			return prop;
 		}
 		
@@ -51,7 +49,6 @@ package redneck.arrange
 				result.width = obj.hasOwnProperty("width") ? obj[ "width" ] : obj.hasOwnProperty("w") ? obj[ "w" ] : NaN;
 				result.height = obj.hasOwnProperty("height") ? obj[ "height" ] : obj.hasOwnProperty("h") ? obj[ "h" ] : NaN;
 				result.step = obj.hasOwnProperty("step") ? obj[ "step" ] : obj.hasOwnProperty("steps") ? obj[ "steps" ] : 1;
-				result.simulate = obj.hasOwnProperty("simulate") ? obj[ "simulate" ] : false
 			}
 			return result;
 		}
