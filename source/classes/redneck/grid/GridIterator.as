@@ -7,8 +7,8 @@ package redneck.grid
 	public class GridIterator
 	{
 
-		private var grid : Grid
-		private var index : int = 0
+		private var grid : Grid;
+		private var index : int = 0;
 
 		public function GridIterator( p_grid : Grid ):void{
 			grid = p_grid;
@@ -38,8 +38,8 @@ package redneck.grid
 		* */
 		public function reset():GridIterator
 		{
-			index = 0
-			return this
+			index = 0;
+			return this;
 		}
 		/**
 		* 
@@ -55,7 +55,7 @@ package redneck.grid
 				index = grid.pointerToIndex(p);
 				return index;
 			}
-			return index++
+			return index++;
 		}
 		/**
 		* @param	loop	Boolean
@@ -77,18 +77,18 @@ package redneck.grid
 		* */
 		public function up( loop:Boolean = false ) : *
 		{
-			var result:int = index
-			var p : Pointer = pointer
+			var result:int = index;
+			var p : Pointer = pointer;
 			if (p){
 				if (p.r==0 && index>0){
-					p.c--
+					p.c--;
 					p.r = grid.height-1;
 				}else{
-					p.r--
+					p.r--;
 				}
 				index = grid.pointerToIndex(p);
 			}
-			return result
+			return result;
 		}
 		/**
 		* @param	loop	Boolean
@@ -96,18 +96,18 @@ package redneck.grid
 		* */
 		public function down( loop:Boolean = false ):*
 		{
-			var result:int = index
-			var p : Pointer = pointer
+			var result:int = index;
+			var p : Pointer = pointer;
 			if (p){
 				if (p.r>=grid.height-1 && index<grid.size-1){
-					p.c++
+					p.c++;
 					p.r = 0;
 				}else{
-					p.r++
+					p.r++;
 				}
 				index = grid.pointerToIndex(p);
 			}
-			return result
+			return result;
 		}
 		/**
 		* @private
@@ -136,7 +136,7 @@ package redneck.grid
 		* */
 		public function hasPrev( p_pointer: Pointer = null ):Boolean
 		{
-			return has(p_pointer)
+			return has(p_pointer);
 		}
 		/**
 		* @param	p_pointer	Pointer
@@ -171,8 +171,8 @@ package redneck.grid
 		* @return int
 		**/
 		public function last():int{
-			index = grid.size-1
-			return index
+			index = grid.size-1;
+			return index;
 		}
 	}
 }

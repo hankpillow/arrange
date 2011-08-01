@@ -13,17 +13,14 @@
  */
 package redneck.arrange
 {
-	import flash.display.DisplayObjectContainer;
-	import flash.display.Stage;
+	import redneck.grid.*;
+
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import flash.text.TextField;
-	
-	import redneck.grid.*;
 	
 	public class Arrange
 	{
-		private var simulating : Boolean
+		private var simulating : Boolean;
 		private var properties : ArrangeProperties;
 		/**
 		*	when using grid methods the created grid goes to this var. 
@@ -32,7 +29,7 @@ package redneck.arrange
 		* @see vGrid
 		* @see hGrid
 		**/
-		public var grid : Grid
+		public var grid : Grid;
 		/**
 		*	Added items lays on this list.
 		* 
@@ -52,7 +49,7 @@ package redneck.arrange
 		**/
 		public function Arrange( to_arrange : * = null ) : void
 		{
-			properties = new ArrangeProperties
+			properties = new ArrangeProperties;
 			arrangeList = new Vector.<DisplayWrapper>( );
 			if (to_arrange){
 				createWrapperList(to_arrange);
@@ -67,7 +64,7 @@ package redneck.arrange
 		{
 			var c:int = 0;
 			while( c<p_list.length ){
-				add(p_list[ c ])
+				add(p_list[ c ]);
 				c++;
 			}
 		}
@@ -84,10 +81,10 @@ package redneck.arrange
 		{
 			if (item && (item is Point || ( item.hasOwnProperty("x") && item.hasOwnProperty("y") && item.hasOwnProperty("width") && item.hasOwnProperty("height") ) ) ){
 				var value : DisplayWrapper = new DisplayWrapper(item);
-					value.simulate = this.simulating
+					value.simulate = this.simulating;
 				arrangeList.push( value );
 			}
-			return this
+			return this;
 		}
 		/**
 		*	Simulate means: Arrange will perform every method you'll 
@@ -114,9 +111,9 @@ package redneck.arrange
 		{
 			simulating = value;
 			arrangeList.forEach( function(obj : DisplayWrapper, ...rest):void{
-				obj.simulate = simulating
-			} )
-			return this
+				obj.simulate = simulating;
+			} );
+			return this;
 		}
 		/**
 		* removes specific item
@@ -127,10 +124,10 @@ package redneck.arrange
 		**/
 		public function remove( item:* ):Arrange{
 			if (item){
-				var index: int = -1
-				arrangeList.forEach( function(w:Object,i:int,arr:*):void{
+				var index: int = -1;
+				arrangeList.forEach( function(w:Object,i:int, ...rest):void{
 					if (w.item==item){
-						index = i
+						index = i;
 					}
 				});
 				if (index!=-1){
@@ -150,7 +147,7 @@ package redneck.arrange
 		**/
 		public function toLeft( prop : Object = null) : Arrange
 		{
-			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop )
+			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop );
 			placeTo( "x", -1, prop);
 			return this;
 		}
@@ -165,9 +162,9 @@ package redneck.arrange
 		**/
 		public function toRight( prop : Object = null) : Arrange
 		{
-			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop )
+			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop );
 			placeTo( "x", 1, prop);
-			return this
+			return this;
 		}
 		/**
 		*	Put the itens on above position of the next.
@@ -179,7 +176,7 @@ package redneck.arrange
 		*	@return Arrange
 		**/
 		public function toTop( prop : Object = null) : Arrange {
-			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop )
+			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop );
 			placeTo( "y", -1, prop );
 			return this;
 		}
@@ -194,7 +191,7 @@ package redneck.arrange
 		**/
 		public function toBottom( prop:Object = null ) : Arrange
 		{
-			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop )
+			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop );
 			placeTo( "y", 1, prop );
 			return this;
 		}
@@ -207,8 +204,8 @@ package redneck.arrange
 				return;
 			}
 
-			var c:int
-			var s:Number
+			var c:int;
+			var s:Number;
 			var reffSize : Number;
 			var reffPos : Number;
 			var objSize : Number;
@@ -242,9 +239,9 @@ package redneck.arrange
 		**/
 		public function byTop( prop:Object = null ) : Arrange
 		{
-			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop )
+			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop );
 			placeBy( "y", 1, prop);
-			return this
+			return this;
 		}
 		/**
 		*	Align all itens by the bottom position of the first item.
@@ -257,9 +254,9 @@ package redneck.arrange
 		**/
 		public function byBottom( prop:Object = null ) : Arrange
 		{
-			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop )
+			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop );
 			placeBy( "y", -1, prop );
-			return this
+			return this;
 		}
 		/**
 		*	Align all itens by the left side of the first item.
@@ -272,7 +269,7 @@ package redneck.arrange
 		**/
 		public function byLeft( prop:Object = null ) : Arrange
 		{
-			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop )
+			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop );
 			placeBy( "x", 1, prop);
 			return this;
 		}
@@ -287,7 +284,7 @@ package redneck.arrange
 		**/
 		public function byRight( prop:Object = null ) : Arrange
 		{
-			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop )
+			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop );
 			placeBy( "x", -1, prop);
 			return this;
 		}
@@ -317,7 +314,7 @@ package redneck.arrange
 					objSize	= arrangeList[ c ][ size ];
 					objPos	= arrangeList[ c ][ prop ];
 					s 		= isNaN(xtras[size]) ? reffSize : xtras[size];
-					arrangeList[ c ][ prop ] = arrangeList[ c ][ prop ] + ( ( ( ( reffPos - objPos + ( operator==1 ? 0 : s - objSize ) ) ) * operator ) * operator ) * xtras.step + ( padding * operator )
+					arrangeList[ c ][ prop ] = arrangeList[ c ][ prop ] + ( ( ( ( reffPos - objPos + ( operator==1 ? 0 : s - objSize ) ) ) * operator ) * operator ) * xtras.step + ( padding * operator );
 				}
 				c++;
 			}
@@ -347,9 +344,9 @@ package redneck.arrange
 		**/
 		public function centerY( prop:Object = null ) : Arrange
 		{
-			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop )
+			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop );
 			placeCenter( "y", prop);
-			return this
+			return this;
 		}
 		/**
 		*	Align all itens by the center X of the first item.
@@ -362,9 +359,9 @@ package redneck.arrange
 		**/
 		public function centerX( prop:Object = null ) : Arrange
 		{
-			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop )
+			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop );
 			placeCenter( "x", prop);
-			return this
+			return this;
 		}
 		/**
 		* @private
@@ -446,7 +443,7 @@ package redneck.arrange
 			}
 			toArrange = null;
 			lazyProp = null;
-			return this
+			return this;
 		}
 		/**
 		*	Create a vertical grid and arrange items.
@@ -490,14 +487,14 @@ package redneck.arrange
 		**/
 		public function byDepth( reverse_list:Boolean=false ):Arrange
 		{
-			var c : int
+			var c : int;
 			if (reverse_list){
 				c = 0;
 				while(c<arrangeList.length){
 					if (arrangeList[c].target && arrangeList[c].target.hasOwnProperty("parent")){
 						arrangeList[c].target.parent.addChild(arrangeList[c].target);
 					}
-					c++
+					c++;
 				}
 			}else{
 				c = arrangeList.length;
@@ -507,7 +504,7 @@ package redneck.arrange
 					}
 				}
 			}
-			return this
+			return this;
 		}
 		/**
 		*	Return the bounds of all items together.
@@ -516,7 +513,7 @@ package redneck.arrange
 		*/
 		public function get bounds( ) : Rectangle
 		{
-			var bounds : Rectangle = new Rectangle
+			var bounds : Rectangle = new Rectangle;
 			if (arrangeList && arrangeList.length>0)
 			{
 				bounds = new Rectangle( arrangeList[ 0 ].x, arrangeList[ 0 ].y, arrangeList[ 0 ].width, arrangeList[ 0 ].height );
@@ -544,7 +541,7 @@ package redneck.arrange
 					arrangeList[ count ].y = int( arrangeList[ count ].y );
 				}
 			}
-			return this
+			return this;
 		}
 		/**
 		* Join the given <code>list</code> with the last item of the current <code>list</code> and return a new Arrange;

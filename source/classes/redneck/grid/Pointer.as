@@ -1,11 +1,10 @@
 package redneck.grid
 {
-	import flash.geom.Point;
 	
 	public class Pointer
 	{
-		public var c : Number
-		public var r : Number
+		public var c : Number;
+		public var r : Number;
 		/**
 		 * 
 		 * @param p_c	int	column
@@ -76,7 +75,7 @@ package redneck.grid
 		* @return Pointer
 		* */
 		public function clone():Pointer{
-			return new Pointer(c,r)
+			return new Pointer(c,r);
 		}
 	}
 }

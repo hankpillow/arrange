@@ -25,7 +25,7 @@ package redneck.arrange
 				prop.width = width;
 				prop.padding_x = padding_x;
 				prop.padding_y = padding_y;
-				prop.step = step
+				prop.step = step;
 			return prop;
 		}
 		

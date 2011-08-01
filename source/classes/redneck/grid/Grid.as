@@ -7,8 +7,8 @@ package redneck.grid
 	public class Grid
 	{
 		//@private
-		private var matrix : Array
-		private var _iterator : GridIterator
+		private var matrix : Array;
+		private var _iterator : GridIterator;
 		private var _height: int;
 		private var _width : int;
 		private var pointer : Pointer;
@@ -30,18 +30,18 @@ package redneck.grid
 		public function set width(value:int):void{_width = Math.max(value,1); }
 		public function get height():int{return  _height; }
 		public function set height(value:int):void{_height = Math.max(value,1); }
-		public function get size():int {return _width*_height }
-		public function get iterator():GridIterator { return _iterator }
+		public function get size():int {return _width*_height; }
+		public function get iterator():GridIterator { return _iterator; }
 		/**
 		* cleanup grid and reset iterator
 		* @return Grid
 		**/
 		public function clean():Grid
 		{
-			pointer = new Pointer
+			pointer = new Pointer;
 			matrix = new Array( size-1 );
 			iterator.reset();
-			return this
+			return this;
 		}
 		/**
 		* @param p_index
@@ -51,11 +51,11 @@ package redneck.grid
 		public function indexToPointer(p_index:int):Pointer
 		{
 			if (hasIndex(p_index)){
-				pointer.r = int(p_index/width)
-				pointer.c = p_index-width*pointer.r
+				pointer.r = int(p_index/width);
+				pointer.c = p_index-width*pointer.r;
 				return pointer;
 			}
-			return null
+			return null;
 		}
 		/**
 		* @param p_pointer	Pointer
@@ -92,9 +92,9 @@ package redneck.grid
 		{
 			if ( hasIndex(index) ){
 				matrix[ index ] = value;
-				return true
+				return true;
 			}
-			return false
+			return false;
 		}
 		/**
 		* Return the grid's value for a given index
@@ -109,7 +109,7 @@ package redneck.grid
 			if (hasIndex(index)){
 				return matrix[ index ];
 			}
-			return null
+			return null;
 		}
 		/**
 		* return the grid's value for a given pointer
@@ -133,12 +133,12 @@ package redneck.grid
 		**/
 		public function fill( value:* = null) : Grid
 		{
-			var counter : int = 0
+			var counter : int = 0;
 			while ( counter<size){
 				add( counter, value || counter );
 				counter++;
 			}
-			return this
+			return this;
 		}
 		/**
 		* Return an array representing row <code>p_row</code>
@@ -157,7 +157,7 @@ package redneck.grid
 				if (hasIndex(index)){
 					result.push(get(index));
 				}
-				index++
+				index++;
 			}
 			return result;
 		}
@@ -172,12 +172,12 @@ package redneck.grid
 		{
 			var result : Array = new Array;
 			var counter : int;
-			var index : int
+			var index : int;
 			while ( counter<size)
 			{
-				index = int(counter%width)
+				index = int(counter%width);
 				if (index==p_column && hasIndex(counter)){
-					result.push(get(counter))
+					result.push(get(counter));
 				}
 				counter++;
 			}
@@ -191,17 +191,17 @@ package redneck.grid
 		public function dump():Grid
 		{
 			trace("Grid("+width+","+height+"):");
-			var counter : int = 0
-			var row : String = ""
+			var counter : int = 0;
+			var row : String = "";
 			while ( counter<size){
 				row += get(counter)+",";
 				counter++;
 				if (counter%width==0){
-					trace(row)
+					trace(row);
 					row = "";
 				}
 			}
-			return this
+			return this;
 		}
 	}
 }

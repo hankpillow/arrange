@@ -9,16 +9,16 @@
  * */
 package redneck.arrange
 {
+	import flash.display.*;
 	import flash.geom.*;
 	import flash.text.*;
-	import flash.display.*;
 
 	public class DisplayWrapper
 	{
 		//@private
 		private var targetX : Number = 0;
 		private var targetY : Number = 0;
-		private var simulatedBounds : Rectangle
+		private var simulatedBounds : Rectangle;
 
 		// the given object
 		private var _target : *;
@@ -45,7 +45,7 @@ package redneck.arrange
 			hasScrollRect	= _target.hasOwnProperty("scrollRect") && (_target.scrollRect!=null) && (_target.scrollRect is Rectangle);
 			hasParent		= _target.hasOwnProperty("parent") && (_target.parent!=null);
 
-			simulatedBounds = getBounds().clone()
+			simulatedBounds = getBounds().clone();
 
 			targetX = _target.x;
 			targetY = _target.y;
@@ -118,7 +118,7 @@ package redneck.arrange
 		**/
 		internal function get x ( ) :Number{
 			if (simulate){
-				simulatedBounds.x = targetX - (hasParent ? _target.x-bounds.x : 0)
+				simulatedBounds.x = targetX - (hasParent ? _target.x-bounds.x : 0);
 				return simulatedBounds.x;
 			}
 			return getBounds().x;
@@ -127,7 +127,7 @@ package redneck.arrange
 		**/
 		internal function get y ( ) : Number{
 			if (simulate){
-				simulatedBounds.y = targetY - (hasParent ? _target.y-bounds.y : 0)
+				simulatedBounds.y = targetY - (hasParent ? _target.y-bounds.y : 0);
 				return simulatedBounds.y;
 			}
 			return getBounds().y;
@@ -149,14 +149,14 @@ package redneck.arrange
 			value = isNaN(value)?0:value;
 			targetY = (hasParent ? _target.y-bounds.y : 0) + value;
 			if (!simulate){
-				_target.y = targetY
+				_target.y = targetY;
 			}
 		}
 
-		internal function get width():Number{return getBounds().width;}
-		internal function get height():Number{return getBounds().height;}
-		internal function set height(value:Number):void{ }
-		internal function set width(value:Number):void{ }
+		internal function get width():Number{return getBounds().width;};
+		internal function get height():Number{return getBounds().height;};
+		internal function set height(value:Number):void{ };
+		internal function set width(value:Number):void{ };
 
 		public function toString():*{return "DisplayWrapper for:"+_target;}
 	}
