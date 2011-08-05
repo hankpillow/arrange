@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+		<title>Arrange is life!</title>
+
+		<meta name="generator" content="TextMate http://macromates.com/">
+		<meta name="author" content="Igor Almeida">
+
+		<link rel="stylesheet" type="text/css" href="http://developer.yahoo.com/yui/build/reset/reset.css">
+		<link rel="stylesheet" href="css/stryles.css" type="text/css" media="screen" title="no title" charset="utf-8">
+		
+		<script src="http://code.jquery.com/jquery-1.4.2.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://jquery.thewikies.com/swfobject/jquery.swfobject.1-1-1.min.js" type="text/javascript" charset="utf-8"></script>
+		
+	</head>
+
+	<body>
+		
+		<h1>Arranging your view.</h1>
+
+		<p>Arranging objects is a simple task but boring and very repetitve.<br />
+		Usually the majority of view's code is about alignment and positioning objects on the screen.<br />
+		Thinking on a way to avoid this repetition since the last year I've been coding the Arrange.<br />
+		It's a simple static class with only one objective: arrange things on the screen!</p>
+
+		<h2>The main methods are listed below:</h2>
+		<ul>
+			<li>toLeft</li>
+			<li>byLeft</li>
+			<li>toRight</li>
+			<li>byRight</li>
+			<li>toTop</li>
+			<li>byTop</li>
+			<li>toBottom</li>
+			<li>byBottom</li>
+			<li>center (wrapper centerX and centerY)</li>
+			<li>centerX</li>
+			<li>centerY</li>
+			<li>round (rounds x and y)</li>
+			<li>vGrid (creates a vertical grid)</li>
+			<li>hGrid (creates an horizontal grid)</li>
+			<li>byDepth</li>
+			<li>simulate (see above)</li>
+			<li>chain (see above)</li>
+		</ul>
+
+		<p>A simple explanation about how it works (mainly about "to" and "by" prefixes) is the next image:</p>
+
+		<img src="image/how.jpg" alt="" title="how"/> <br />
+
+		All other methods follows the same rule above.
+
+		<h2>How to use it?</h2>
+
+		<pre>
+place( [box, circle, field] ).toRight( );</pre>
+		
+		<h2>What's happening?</h2>
+		
+		<ol>
+			<li>"place" is just a wrapper for "new Arrange()"</li>
+			<li>"box" is a simple sprite</li>
+			<li>"circle" is a sprite with the register point centered. Note that the script is able to figure the real bounds of this object</li>
+			<li>"field" is a simple textfield.</li>
+		</ol>
+		
+		<div id="arr1" class="flash">
+			<script type="text/javascript" charset="utf-8">
+				$("#arr1").flash({
+					swf: "swf/arr1.swf",
+					width: 150,
+					height: 100
+				});
+			</script>
+		</div>
+
+		Nevertheless to have the same result in a conventional way you'll probably script these lines<em> (considering only this couple of objects)</em>:
+
+		<pre>
+circle.x = box.x + box.width + circle.width * 0.5;
+field.x = circle.x + circle.width * 0.5;</pre>
+
+		<h2>And only these lines:</h2>
+
+		<code >place( [stage,box,circle,field] ).centerX().toBottom();</code>
+
+		<div id="arr2" class="flash">
+			<script type="text/javascript" charset="utf-8">
+				$("#arr2").flash({
+					swf: "swf/arr2.swf",
+					width: 150,
+					height: 100
+				});
+			</script>
+		</div>
+
+		<h2>Against all these:</h2>
+
+		<pre>
+box.x = stage.stageWidth*.5 - box.width*.5;
+circle.x = stage.stageWidth*.5;
+field.x = stage.stageWidth*.5 - field.width*.5;
+circle.y = box.y + box.height + circle.height*.5;
+field.y = circle.y + circle.height*.5;</pre>
+
+		<p>Pretty simple!</p>
+
+		<p>Arrange supports also an extra parameter which is a simple Object to provide special setting such as paddings, fixed width/height and etc (see <a href="https://github.com/hankpillow/arrange/blob/master/classes/redneck/arrange/ArrangeProperties.as">ArrangeProperties</a>):</p>
+
+		<pre>place( [box,circle,field]).toRight({padding_x:5});
+// or just {x:5}</pre>
+
+		<div id="arr3" class="flash">
+			<script type="text/javascript" charset="utf-8">
+				$("#arr3").flash({
+					swf: "swf/arr3.swf",
+					width: 150,
+					height: 100
+				});
+			</script>
+		</div>
+
+		Another great features are the "grid methods" (<em>hGrid</em> and <em>vGrid</em>) what place your objects in a grid format and returns a <a href="https://github.com/hankpillow/grid">Grid</a> class to easily manages every single item.
+
+		<h2>Vertical grid:</h2>
+
+		<pre>var grid : Grid = place(list).vGrid( 3, {padding_x:2, padding_y:2} );
+// list is an array with many sprites
+// 3 is the number of columns</pre>
+
+		<div id="arr-v-grid" class="flash">
+			<script type="text/javascript" charset="utf-8">
+				$("#arr-v-grid").flash({
+					swf: "swf/arr-v-grid.swf",
+					width: 150,
+					height: 150
+				});
+			</script>
+		</div>
+
+		<h2>Horizontal grid:</h2>
+
+		<pre>var grid : Grid = place(list).hGrid( 3, {padding_x:2, padding_y:2} );
+// list is an array with many sprites
+// 3 is the number of rows</pre>
+
+		<div id="arr-h-grid" class="flash">
+			<script type="text/javascript" charset="utf-8">
+				$("#arr-h-grid").flash({
+					swf: "swf/arr-h-grid.swf",
+					width: 150,
+					height: 150
+				});
+			</script>
+		</div>
+		
+		<h2>happy coding!</h2>
+	</body>
+</html>
