@@ -1,3 +1,24 @@
+### IMPORTANT CHANGES
+
+**Arrange** worked together with **Grid** all this time and I was not giving the proper importance to it. Grid is very good to manipulate bidimensional arrays and I've decided to keep it into a new git repository. 
+
+If you have the intention of cloning this repository keep in mind that the Grid package is not longer inside classses/redneck/grid but inside the submodule "submoldule-grid".
+
+So, if you clone it and want to see what is inside you must do this:
+
+* git clone git@github.com:hankpillow/arrange.git arrange 
+* cd arrange
+* git submodule init
+* git submodule update
+
+Now all files are there and you can check everything out. 
+
+Once you just want to use it I rather recommend grabbing the swc/arrange.swc file which contains everything you need to use.
+
+To see more about Grid click [here](https://github.com/hankpillow/grid).
+
+To see more examples using Arrange click [here](http://hankpillow.github.com/arrange/).
+
 # Arrange
 
 Arranging objects is a simple, but boring and very repetitive task.
