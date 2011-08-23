@@ -17,7 +17,7 @@ Once you just want to use it I rather recommend grabbing the swc/arrange.swc fil
 
 To see more about Grid click [here](https://github.com/hankpillow/grid).
 
-To see more examples using Arrange click [here](http://hankpillow.github.com/arrange/).
+To see more examples using Arrange click [here](http://hankpillow.github.com/arrange/examples/).
 
 # Arrange
 
