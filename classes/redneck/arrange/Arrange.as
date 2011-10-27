@@ -125,7 +125,7 @@ package redneck.arrange
 		public function remove( item:* ):Arrange{
 			if (item){
 				var index: int = -1;
-				arrangeList.forEach( function(w:Object,i:int, ...rest):void{
+				arrangeList.forEach( function(w:Object,i:int):void{
 					if (w.item==item){
 						index = i;
 					}
@@ -403,46 +403,68 @@ package redneck.arrange
 		*	@param	columns		uint
 		*	@param	rows		uint
 		*	@param	prop		Object
-		*
+		*	@param  vertical	Boolean
 		*	@return Arrange
 		**/
-		private function createGrid( columns:uint, rows:uint, props: Object = null) : Arrange
+		private function createGrid( columns:uint, rows:uint, props: Object = null, vertical : Boolean = true) : Arrange
 		{
 			grid = new Grid ( columns, rows );
-			var size : int = grid.size;
-			var count :int = 0;
 
-			while ( count<size )
+			var size : int
+			var count :int
+
+			if (vertical)
 			{
-				if (count<arrangeList.length){
-					grid.add( count, arrangeList[ count ].target );
+				size = grid.size;
+				while ( count<size )
+				{
+					if (count<arrangeList.length){
+						grid.add( count, arrangeList[ count ].target );
+					}
+					count++;
 				}
-				count++;
+			}
+			else
+			{
+				var column : int = grid.width;
+				var row	: int = grid.height;
+				var row_count : uint
+				var column_count: uint
+				var index : uint
+
+				while(column_count<column)
+				{
+					while( row_count<row )
+					{
+						if (count<arrangeList.length)
+						{
+							grid.add( grid.pointerToIndex(new Pointer( column_count, row_count )) , arrangeList[count].target );
+							count++
+						}
+						row_count++;
+					}
+					row_count = 0;
+					column_count++
+				}
+				grid.dump()
 			}
 
 			grid.iterator.reset( );
-			var lazyProp : ArrangeProperties = properties.clone();
-			if ( props) {
-				lazyProp.step = props["step"] || 1;
-				lazyProp.width = props["width"] || NaN;
-				lazyProp.height = props["height"] || NaN;
-			}
+
+			const lazyProp : ArrangeProperties = (props == null) ? properties : (props is ArrangeProperties) ? props as ArrangeProperties : ArrangeProperties.fromObject( props );
 
 			// arranging first column
 			new Arrange(grid.getColumn(0)).byLeft(lazyProp).toBottom(props);
 
-			var toArrange : Array;
 			count = 0;
 			size = grid.getColumn(0).length;
 
 			while ( count < size ){
 				// getting rows and aligning it
-				toArrange = grid.getRow(count);
-				new Arrange(toArrange).byTop(lazyProp).toRight(props);
+				new Arrange(grid.getRow(count)).byTop(lazyProp).toRight(lazyProp);
 				count++;
 			}
-			toArrange = null;
-			lazyProp = null;
+
 			return this;
 		}
 		/**
@@ -475,7 +497,7 @@ package redneck.arrange
 		*	@return Arrange
 		**/
 		public function hGrid( rows:uint, prop:Object = null ) : Arrange {
-			return createGrid( Math.ceil(arrangeList.length/rows), rows, prop );
+			return createGrid( Math.ceil(arrangeList.length/rows), rows, prop, false );
 		}
 		/**
 		*	Change the depths in the same order of the array.
