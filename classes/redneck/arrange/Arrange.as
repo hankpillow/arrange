@@ -446,7 +446,6 @@ package redneck.arrange
 					row_count = 0;
 					column_count++
 				}
-				grid.dump()
 			}
 
 			grid.iterator.reset( );
