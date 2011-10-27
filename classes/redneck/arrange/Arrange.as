@@ -450,7 +450,12 @@ package redneck.arrange
 
 			grid.iterator.reset( );
 
-			const lazyProp : ArrangeProperties = (props == null) ? properties : (props is ArrangeProperties) ? props as ArrangeProperties : ArrangeProperties.fromObject( props );
+			var lazyProp : ArrangeProperties = properties.clone();
+			if ( props) {
+				lazyProp.step = props["step"] || 1;
+				lazyProp.width = props["width"] || NaN;
+				lazyProp.height = props["height"] || NaN;
+			}
 
 			// arranging first column
 			new Arrange(grid.getColumn(0)).byLeft(lazyProp).toBottom(props);
@@ -460,7 +465,7 @@ package redneck.arrange
 
 			while ( count < size ){
 				// getting rows and aligning it
-				new Arrange(grid.getRow(count)).byTop(lazyProp).toRight(lazyProp);
+				new Arrange(grid.getRow(count)).byTop(lazyProp).toRight(props);
 				count++;
 			}
 
