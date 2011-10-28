@@ -560,13 +560,15 @@ package redneck.arrange
 		**/
 		public function round(...rest) : Arrange
 		{
-			var count:int = arrangeList.length;
-			while (count--){
-				if ( arrangeList[ count ] ){
-					arrangeList[ count ].x = int( arrangeList[ count ].x );
-					arrangeList[ count ].y = int( arrangeList[ count ].y );
+			const count : int = arrangeList.length;
+
+			while (count--) {
+				if (arrangeList[count]) {
+					arrangeList[ count ].x = arrangeList[ count ].x ^ 0;
+					arrangeList[ count ].y = arrangeList[ count ].y ^ 0;
 				}
 			}
+
 			return this;
 		}
 		/**
