@@ -87,17 +87,17 @@ package redneck.arrange
 			if ( hasParent )
 			{
 				if ( _target.width + _target.height == 0 && 
-					 !(_target is TextField) && 
+					 (_target is TextField == false) && 
 					 _target.hasOwnProperty("transform") && 
 					 (_target.transform!=null) && 
-					 (_target is DisplayObjectContainer) )
+					 (_target.transform.pixelBounds!=null) )
 				{
 					// pixelbounds is the better way to get the display's size
 					// because the getRect/getBounds just doesn't work for "empty" displays 
 					// neither for textfields.
 
 					// check it out:
-					// trace(addChild(new Sprite()).getRect(stage))
+					// trace(addChild(new Sprite()).getBounds(stage))
 					// (x=6710886.4, y=6710886.4, w=0, h=0)
 					bounds = _target.transform.pixelBounds;
 				}
@@ -139,7 +139,7 @@ package redneck.arrange
 			value = isNaN(value)?0:value;
 			targetX = (hasParent ? _target.x-bounds.x : 0) + value;
 			if (!simulate){
-				_target.x = targetX
+				_target.x = targetX;
 			}
 		}
 		/**
@@ -153,10 +153,8 @@ package redneck.arrange
 			}
 		}
 
-		internal function get width():Number{return getBounds().width;};
-		internal function get height():Number{return getBounds().height;};
-		internal function set height(value:Number):void{ };
-		internal function set width(value:Number):void{ };
+		internal function get width():Number{return getBounds().width;}
+		internal function get height():Number{return getBounds().height;}
 
 		public function toString():*{return "DisplayWrapper for:"+_target;}
 	}
