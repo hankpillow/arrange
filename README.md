@@ -74,11 +74,7 @@ Every method accepts an ArrangeProperties object (or any object with allowed pro
 <pre><code>place( [sp1,sp2,spN] ).toRight( {padding_x:10} );</code></pre>
 In this example the given list will be arranged placing every item to right side of the previous and adding a padding with 10px.
 
-<pre><code>place( [sp1,sp2,spN] ).toRight( {step:0.5} );</code></pre>
-In this example the given list will be arranged placing every item at the 50% of the "real" right side.
-If you have 2 objects with 50px (at 0,0 position) and call the method above, the second object will be placed at x=25 and not at x=50 as if you had called *toRight* without any *step*.
-
-But if your object has a timeline in which the object's size changes during this time, you can also pass an optional object with *width* and *height* and the engine will ignore the real size and use the given one.
+If your object has a timeline in which the object's size changes during this time, you can also pass an optional object with *width* and *height* and the engine will ignore the real size and use the given one.
 
 You have also some alias for this properties:
 
@@ -86,7 +82,6 @@ You have also some alias for this properties:
 * <code>padding_y</code> = <code>y</code> = <code>py</code> = <code>paddingY</code>
 * <code>width</code> = <code>w</code>
 * <code>height</code> = <code>h</code>
-* <code>step</code> = <code>steps</code>
 
 ## What's new?
 
