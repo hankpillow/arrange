@@ -2,14 +2,20 @@
  * 
  *	Arrange is life!
  *
- * 	Arrange is just a simple way to change the position of your objects.
  *	@usage
- *	new Arrange( [buttonA, buttonB, buttonX] ).toRight().byBottom().round( );
+ *	var arrange: Arrange = new Arrange( [buttonA, buttonB, buttonX] ).toRight().byBottom().round( );
  *
  *	@author igor almeida
- *	@version 2.0
- *	@since 11.04.2008
- * 
+ *	@co-author rafael rinaldi
+ *
+ *	@version 2.1
+ *
+ *	@since 2008.04.11 saving developer's time.
+ *
+ *	2.1 change log:
+	- ArrangeProperties.step removed (its not necessary once Arrange has simulatin method)
+	- byDepth performance improved
+ *
  */
 package redneck.arrange
 {
@@ -52,20 +58,11 @@ package redneck.arrange
 			properties = new ArrangeProperties;
 			arrangeList = new Vector.<DisplayWrapper>( );
 			if (to_arrange){
-				createWrapperList(to_arrange);
-			}
-		}
-		 /**
-		 *	@param	a	Array, Vector
-		 * 
-		 *	@return Arrange
-		 **/
-		internal function createWrapperList( p_list:* ) : void
-		{
-			var c:int = 0;
-			while( c<p_list.length ){
-				add(p_list[ c ]);
-				c++;
+				var c:int = 0;
+				while( c<to_arrange.length ){
+					add( to_arrange[ c ]);
+					c++;
+				}
 			}
 		}
 		/**
@@ -79,7 +76,7 @@ package redneck.arrange
 		**/
 		public function add( item:* ):Arrange
 		{
-			if (item && (item is Point || ( item.hasOwnProperty("x") && item.hasOwnProperty("y") && item.hasOwnProperty("width") && item.hasOwnProperty("height") ) ) ){
+			if ( item!=null && (item is Point || ( item.hasOwnProperty("x") && item.hasOwnProperty("y") && item.hasOwnProperty("width") && item.hasOwnProperty("height") ) ) ){
 				var value : DisplayWrapper = new DisplayWrapper(item);
 					value.simulate = this.simulating;
 				arrangeList.push( value );
@@ -122,15 +119,22 @@ package redneck.arrange
 		* 
 		* @return Arrange
 		**/
-		public function remove( item:* ):Arrange{
-			if (item){
+		public function remove( item:* ):Arrange
+		{
+			if (item!=null)
+			{
 				var index: int = -1;
-				arrangeList.forEach( function(w:Object,i:int):void{
-					if (w.item==item){
+				arrangeList.some( function(display:DisplayWrapper,i:int):Boolean
+				{
+					if (display.target==item){
 						index = i;
+						return true;
 					}
+					return false;
 				});
-				if (index!=-1){
+
+				if (index!=-1)
+				{
 					arrangeList.splice(index,1);
 				}
 			}
@@ -223,7 +227,7 @@ package redneck.arrange
 					objSize		= arrangeList[ c ][ size ];
 					objPos		= arrangeList[ c  ][ prop ];
 					s			= isNaN(xtras[size]) ? ( operator < 0 ) ? objSize : reffSize : xtras[size];
-					arrangeList[ c ][ prop ] = arrangeList[ c ][ prop ] + ( ( ( reffPos - objPos ) * operator + s + padding ) * xtras.step ) * operator;
+					arrangeList[ c ][ prop ] = arrangeList[ c ][ prop ] + ( ( reffPos - objPos ) * operator + s + padding ) * operator;
 				}
 				c++;
 			}
@@ -307,14 +311,14 @@ package redneck.arrange
 			const reffSize : Number = arrangeList[ 0 ][ size ];
 			const reffPos : Number = arrangeList[ 0 ][ prop ];
 
-			while ( c<arrangeList.length)
+			while ( c<arrangeList.length )
 			{
 				if( c>0 && arrangeList[ c ] != null )
 				{
 					objSize	= arrangeList[ c ][ size ];
 					objPos	= arrangeList[ c ][ prop ];
 					s 		= isNaN(xtras[size]) ? reffSize : xtras[size];
-					arrangeList[ c ][ prop ] = arrangeList[ c ][ prop ] + ( ( ( ( reffPos - objPos + ( operator==1 ? 0 : s - objSize ) ) ) * operator ) * operator ) * xtras.step + ( padding * operator );
+					arrangeList[ c ][ prop ] = arrangeList[ c ][ prop ] + ( ( reffPos - objPos + ( operator==1 ? 0 : s - objSize ) ) ) + ( padding * operator );
 				}
 				c++;
 			}
@@ -330,8 +334,7 @@ package redneck.arrange
 		**/
 		public function center( prop:Object = null ) : Arrange
 		{
-			centerY( prop );
-			return centerX( prop );
+			return centerY( prop ).centerX( prop );
 		}
 		/**
 		*	Align all itens by the center height of the first.
@@ -390,7 +393,7 @@ package redneck.arrange
 					objSize = arrangeList[ c ][ size ];
 					objPos = arrangeList[ c ][ prop ];
 					s = isNaN(xtras[size]) ? objSize : xtras[size];
-					arrangeList[ c ][ prop ] = arrangeList[ c ][ prop ] - ( ( objPos - reffPos ) + ( s * .5 - reff ) + padding ) * xtras.step;
+					arrangeList[ c ][ prop ] = arrangeList[ c ][ prop ] - ( ( objPos - reffPos ) + ( s * 0.5 - reff ) + padding );
 				}
 				c++;
 			}
@@ -451,8 +454,7 @@ package redneck.arrange
 			grid.iterator.reset( );
 
 			var lazyProp : ArrangeProperties = properties.clone();
-			if ( props) {
-				lazyProp.step = props["step"] || 1;
+			if ( props!=null ) {
 				lazyProp.width = props["width"] || NaN;
 				lazyProp.height = props["height"] || NaN;
 			}
@@ -513,22 +515,14 @@ package redneck.arrange
 		**/
 		public function byDepth( reverse_list:Boolean=false ):Arrange
 		{
-			var c : int;
-			if (reverse_list){
-				c = 0;
-				while(c<arrangeList.length){
-					if (arrangeList[c].target && arrangeList[c].target.hasOwnProperty("parent")){
-						arrangeList[c].target.parent.addChild(arrangeList[c].target);
-					}
-					c++;
-				}
-			}else{
-				c = arrangeList.length;
-				while(c--){
-					if (arrangeList[c].target && arrangeList[c].target.hasOwnProperty("parent")){
-						arrangeList[c].target.parent.addChild(arrangeList[c].target);
-					}
-				}
+			var count : int = arrangeList.length
+			var index : uint
+			while(count--)
+			{
+				index =  reverse_list ? count : (arrangeList.length-1)-count;
+				if (arrangeList[index].target !=null && arrangeList[index].hasParent ){
+					arrangeList[index].target.parent.addChild(arrangeList[index].target);
+				}	
 			}
 			return this;
 		}
@@ -587,13 +581,13 @@ package redneck.arrange
 		* 
 		* @return Arrange
 		**/
-		public function chain(list:Array):Arrange
+		public function chain(list:*):Arrange
 		{
-			if (arrangeList && arrangeList.length>0 && list){
+			if ( arrangeList!=null && arrangeList.length>0 && list!=null ){
 				//concat the very list with the given list
 				return new Arrange( [arrangeList[arrangeList.length-1].target].concat(list) );
 			}
-			else if (list){
+			else if (list!=null){
 				//if empty, no worry, just return a new arrange
 				return new Arrange(list);
 			}
