@@ -8,13 +8,17 @@
  *	@author igor almeida
  *	@co-author rafael rinaldi
  *
- *	@version 2.1
+ *	@version 2.2
  *
  *	@since 2008.04.11 saving developer's time.
  *
  *	2.1 change log:
 	- ArrangeProperties.step removed (its not necessary once Arrange has simulatin method)
 	- byDepth performance improved
+
+ *	2.2 change log:
+	- normalizeProperties created avoiding code repetition;
+	- fromGrid
  *
  */
 package redneck.arrange
@@ -76,7 +80,10 @@ package redneck.arrange
 		**/
 		public function add( item:* ):Arrange
 		{
-			if ( item!=null && (item is Point || ( item.hasOwnProperty("x") && item.hasOwnProperty("y") && item.hasOwnProperty("width") && item.hasOwnProperty("height") ) ) ){
+			if (item is DisplayWrapper){
+				arrangeList.push( value );
+			}
+			else if ( item!=null && (item is Point || ( item.hasOwnProperty("x") && item.hasOwnProperty("y") && item.hasOwnProperty("width") && item.hasOwnProperty("height") ) ) ){
 				var value : DisplayWrapper = new DisplayWrapper(item);
 					value.simulate = this.simulating;
 				arrangeList.push( value );
@@ -141,71 +148,66 @@ package redneck.arrange
 			return this;
 		}
 		/**
+		* @return ArrangeProperties
+		**/
+		protected function normalizeProperties(prop:*):ArrangeProperties{
+			return (prop == null) ? properties : (prop is ArrangeProperties) ? prop : ArrangeProperties.fromObject( prop );
+		}
+		/**
 		*	Put the itens on left side of the next
 		* 
 		*	@see ArrangeProperties.ALLOWED_PROPERTIES
 		* 
-		*	@param	props		Object
+		*	@param	prop		Object
 		* 	
 		* 	@return Arrange
 		**/
-		public function toLeft( prop : Object = null) : Arrange
-		{
-			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop );
-			placeTo( "x", -1, prop);
-			return this;
+		public function toLeft( prop : Object = null) : Arrange {
+			return placeTo( "x", -1, normalizeProperties(prop));
 		}
 		/**
 		*	Put the itens on right side of the next
 		* 
 		* 	@see ArrangeProperties.ALLOWED_PROPERTIES
 		* 
-		*	@param	props		Object
+		*	@param	prop		Object
 		*
 		*	@return Arrange
 		**/
-		public function toRight( prop : Object = null) : Arrange
-		{
-			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop );
-			placeTo( "x", 1, prop);
-			return this;
+		public function toRight( prop : Object = null) : Arrange {
+			return placeTo( "x", 1, normalizeProperties(prop));
 		}
 		/**
 		*	Put the itens on above position of the next.
 		* 
 		*	@see ArrangeProperties.ALLOWED_PROPERTIES 
 		* 
-		*	@param	props		Object
+		*	@param	prop		Object
 		*	
 		*	@return Arrange
 		**/
 		public function toTop( prop : Object = null) : Arrange {
-			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop );
-			placeTo( "y", -1, prop );
-			return this;
+			return placeTo( "y", -1, normalizeProperties(prop) );
 		}
 		/**
 		*	Put the itens on under position of the next.
 		* 
 		* 	@see ArrangeProperties.ALLOWED_PROPERTIES 
 		* 
-		*	@param	props		Object	
+		*	@param	prop		Object	
 		* 
 		*	@return Arrange
 		**/
-		public function toBottom( prop:Object = null ) : Arrange
-		{
-			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop );
-			placeTo( "y", 1, prop );
-			return this;
+		public function toBottom( prop:Object = null ) : Arrange {
+			return placeTo( "y", 1, normalizeProperties(prop) );
 		}
 		/**
 		 * @private
 		 **/
-		internal function placeTo( prop:String, operator:int, xtras : Object ) : void
+		protected function placeTo( prop:String, operator:int, xtras : Object ) : Arrange
 		{
 			if ( arrangeList.length<=1 ){
-				return;
+				return this;
 			}
 
 			var c:int;
@@ -231,74 +233,63 @@ package redneck.arrange
 				}
 				c++;
 			}
+			return this;
 		}
 		/**
 		*	Align all itens by the top position of the first item
 		* 
 		*	@see ArrangeProperties.ALLOWED_PROPERTIES 
 		* 
-		*	@param	props		Object
+		*	@param	prop		Object
 		* 
 		*	@return Arrange
 		**/
-		public function byTop( prop:Object = null ) : Arrange
-		{
-			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop );
-			placeBy( "y", 1, prop);
-			return this;
+		public function byTop( prop:Object = null ) : Arrange {
+			return placeBy( "y", 1, normalizeProperties(prop));
 		}
 		/**
 		*	Align all itens by the bottom position of the first item.
 		* 
 		* 	@see ArrangeProperties.ALLOWED_PROPERTIES
 		* 
-		*	@param	props		Object
+		*	@param	prop		Object
 		*
 		*	@return Arrange
 		**/
-		public function byBottom( prop:Object = null ) : Arrange
-		{
-			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop );
-			placeBy( "y", -1, prop );
-			return this;
+		public function byBottom( prop:Object = null ) : Arrange {
+			return placeBy( "y", -1, normalizeProperties(prop) );
 		}
 		/**
 		*	Align all itens by the left side of the first item.
 		* 	
 		*	@see ArrangeProperties.ALLOWED_PROPERTIES
 		* 
-		*	@param	props		Object	
+		*	@param	prop		Object	
 		* 
 		* 	@return Arrange
 		**/
-		public function byLeft( prop:Object = null ) : Arrange
-		{
-			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop );
-			placeBy( "x", 1, prop);
-			return this;
+		public function byLeft( prop:Object = null ) : Arrange {
+			return placeBy( "x", 1, normalizeProperties(prop));
 		}
 		/**
 		*	Align all itens by the right side of the first item.
 		* 
 		*	@see ArrangeProperties.ALLOWED_PROPERTIES 
 		* 
-		*	@param	props		Object	
+		*	@param	prop		Object	
 		*	
 		*	@return Arrange
 		**/
-		public function byRight( prop:Object = null ) : Arrange
-		{
-			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop );
-			placeBy( "x", -1, prop);
-			return this;
+		public function byRight( prop:Object = null ) : Arrange {
+			return placeBy( "x", -1, normalizeProperties(prop));
 		}
 		/**
 		 * @private
 		 **/
-		internal function placeBy( prop:String, operator:int = 0, xtras:Object = null ) : void
+		protected function placeBy( prop:String, operator:int = 0, xtras:Object = null ) : Arrange
 		{
 			if ( arrangeList.length<=1 || arrangeList[0]==null ){
-				return;
+				return this;
 			}
 
 			var c:int = 0;
@@ -322,13 +313,14 @@ package redneck.arrange
 				}
 				c++;
 			}
+			return this;
 		}
 		/**
 		*	Align all itens by the center width of the first item.
 		* 
 		*	@see ArrangeProperties.ALLOWED_PROPERTIES 
 		* 
-		*	@param	props		Object	
+		*	@param	prop		Object	
 		* 
 		*	@return Arrange
 		**/
@@ -341,38 +333,32 @@ package redneck.arrange
 		* 
 		* 	@see ArrangeProperties.ALLOWED_PROPERTIES
 		* 
-		*	@param	props		Object	
+		*	@param	prop		Object	
 		*
 		*	@return Arrange
 		**/
-		public function centerY( prop:Object = null ) : Arrange
-		{
-			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop );
-			placeCenter( "y", prop);
-			return this;
+		public function centerY( prop:Object = null ) : Arrange {
+			return placeCenter( "y", normalizeProperties(prop));
 		}
 		/**
 		*	Align all itens by the center X of the first item.
 		* 
 		*	@see	ArrangeProperties.ALLOWED_PROPERTIES 
 		*
-		*	@param	props		Object	
+		*	@param	prop		Object	
 		*
 		*	@return Arrange
 		**/
-		public function centerX( prop:Object = null ) : Arrange
-		{
-			prop = prop == null ? properties : (prop is ArrangeProperties) ? prop as ArrangeProperties : ArrangeProperties.fromObject( prop );
-			placeCenter( "x", prop);
-			return this;
+		public function centerX( prop:Object = null ) : Arrange {
+			return placeCenter( "x", normalizeProperties(prop));
 		}
 		/**
 		* @private
 		**/
-		internal function placeCenter( prop:String, xtras:Object ) : void
+		protected function placeCenter( prop:String, xtras:Object ) : Arrange
 		{
 			if ( arrangeList[ 0 ]==null && arrangeList.length<=1 ){
-				return;
+				return this;
 			}
 
 			var c:int = 0;
@@ -397,82 +383,53 @@ package redneck.arrange
 				}
 				c++;
 			}
-		}
-		/**
-		* 	@see Grid
-		* 	@see Arrange.grid
-		*	@see ArrangeProperties.ALLOWED_PROPERTIES
-		*
-		*	@param	columns		uint
-		*	@param	rows		uint
-		*	@param	prop		Object
-		*	@param  vertical	Boolean
-		*	@return Arrange
-		**/
-		private function createGrid( columns:uint, rows:uint, props: Object = null, vertical : Boolean = true) : Arrange
-		{
-			grid = new Grid ( columns, rows );
-
-			var size : int
-			var count :int
-
-			if (vertical)
-			{
-				size = grid.size;
-				while ( count<size )
-				{
-					if (count<arrangeList.length){
-						grid.add( count, arrangeList[ count ].target );
-					}
-					count++;
-				}
-			}
-			else
-			{
-				var column : int = grid.width;
-				var row	: int = grid.height;
-				var row_count : uint
-				var column_count: uint
-				var index : uint
-
-				while(column_count<column)
-				{
-					while( row_count<row )
-					{
-						if (count<arrangeList.length)
-						{
-							grid.add( grid.pointerToIndex(new Pointer( column_count, row_count )) , arrangeList[count].target );
-							count++
-						}
-						row_count++;
-					}
-					row_count = 0;
-					column_count++
-				}
-			}
-
-			grid.iterator.reset( );
-
-			var lazyProp : ArrangeProperties = properties.clone();
-			if ( props!=null ) {
-				lazyProp.width = props["width"] || NaN;
-				lazyProp.height = props["height"] || NaN;
-			}
-
-			// arranging first column
-			new Arrange(grid.getColumn(0)).byLeft(lazyProp).toBottom(props);
-
-			count = 0;
-			size = grid.getColumn(0).length;
-
-			while ( count < size ){
-				// getting rows and aligning it
-				new Arrange(grid.getRow(count)).byTop(lazyProp).toRight(props);
-				count++;
-			}
-
 			return this;
 		}
+		/**
+		* 	The main difference between <code>fromGrid</code> and <code>vGrid</code> or <code>hGrid</code> is that 
+		* 	using <code>fromGrid</code> the Arrange will not perform any Math to figure out how is your grid or even create one.
+		* 	It will assume that your grid is correct and stuffed with Displayobjects.
+		* 
+		* 	Calling this method you save a bit of performance and you can even manipulate your <code>Grid</code> as you prefer and
+		*	just update object's position.
+		* 
+		* 	@see vGrid
+		* 	@see hGrid
+		* 
+		*	@param value	Grid	A grid filled with Displayobject you want to arrange in it.
+		*	@param prop	Object
+		* 
+		*	@return Arrange
+		**/
+		public function fromGrid( value:Grid, prop:*=null ) : Arrange
+		{
+			prop = normalizeProperties(prop);
+			if ( grid == null || grid != value || grid.size!=value.size ){
+				grid = value;
+				arrangeList = new Vector.<DisplayWrapper>( );
+				grid.iterator.forEach(function(item:*,...rest):void{
+					add(item);
+				});
+			}
+
+			const lazyProp : ArrangeProperties = properties.clone();
+				lazyProp.width = prop.width;
+				lazyProp.height = prop.height;
+
+			// arranging first column
+			new Arrange(grid.getColumn(0)).byLeft(lazyProp).toBottom(prop);
+			
+			// getting rows
+			const size:uint = grid.height;
+			var count:uint = 0;
+			while ( count < size ){
+				// getting rows and aligning it
+				new Arrange(grid.getRow(count)).byTop(lazyProp).toRight(prop);
+				count++;
+			}
+			return this;
+		}
+		
 		/**
 		*	Create a vertical grid and arrange items.
 		*	You just have to say the number of <code>columns</code> 
@@ -486,8 +443,13 @@ package redneck.arrange
 		* 
 		*	@return Arrange
 		**/
-		public function vGrid( columns:uint, prop:Object = null ) : Arrange {
-			return createGrid( columns, Math.ceil(arrangeList.length/columns), prop );
+		public function vGrid( columns:uint, prop:Object = null ) : Arrange
+		{
+			grid = new Grid ( columns, Math.ceil(arrangeList.length/columns) );
+			grid.iterator.forEach( function(item:*,i:uint,...rest):void{
+				grid.add( arrangeList[ i ].target, i );
+			} );
+			return fromGrid( grid, prop );
 		}
 		/**
 		*	Create a horizinotal grid and arrange items. 
@@ -502,8 +464,32 @@ package redneck.arrange
 		* 
 		*	@return Arrange
 		**/
-		public function hGrid( rows:uint, prop:Object = null ) : Arrange {
-			return createGrid( Math.ceil(arrangeList.length/rows), rows, prop, false );
+		public function hGrid( rows:uint, prop:Object = null ) : Arrange 
+		{
+			grid = new Grid ( Math.ceil(arrangeList.length/rows), rows );
+
+			var column			: int = grid.width;
+			var row				: int = grid.height;
+			var row_count		: uint;
+			var column_count	: uint;
+			var index			: uint;
+			var count			: uint;
+
+			while(column_count<column)
+			{
+				while( row_count<row )
+				{
+					if (count<arrangeList.length)
+					{
+						grid.add( arrangeList[count].target, grid.pointerToIndex(new Pointer( column_count, row_count )));
+						count++;
+					}
+					row_count++;
+				}
+				row_count = 0;
+				column_count++
+			}
+			return fromGrid( grid, prop );
 		}
 		/**
 		*	Change the depths in the same order of the array.
