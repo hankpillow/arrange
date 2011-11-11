@@ -64,6 +64,7 @@ I kept all methods and special properties in this version, just the API is a bit
 * round *(rounds x and y)*
 * vGrid *(creates a vertical grid)*
 * hGrid *(creates an horizontal grid)*
+* fromGrid *(uses the given Grid as data source)*
 * byDepth
 * simulate *(see above)*
 * chain *(see above)*
