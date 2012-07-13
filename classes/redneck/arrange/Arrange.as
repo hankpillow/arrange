@@ -447,6 +447,7 @@ package redneck.arrange
 		{
 			grid = new Grid ( columns, Math.ceil(arrangeList.length/columns) );
 			grid.iterator.forEach( function(item:*,i:uint,...rest):void{
+				if (i>arrangeList.length-1){return}
 				grid.add( arrangeList[ i ].target, i );
 			} );
 			return fromGrid( grid, prop );
